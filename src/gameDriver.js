@@ -5,6 +5,7 @@ export function createGameDriver() {
     player1: createPlayer('player1'),
     player2: createPlayer('player2'),
     isPlayer1Turn: true,
+    activeGame: false,
     consoleLogGameBoards() {
       //       | hit | not hit |
       // ship  |  !  |    o    |
@@ -69,6 +70,44 @@ export function createGameDriver() {
       this.player1 = createPlayer('player1');
       this.player2 = createPlayer('player2');
     },
+    computerAttackPlayer() {
+      let valid = false;
+      let coordStr;
+      while (!valid) {
+        let x = Math.floor(Math.random() * 10);
+        let y = Math.floor(Math.random() * 10);
+        coordStr = `${x},${y}`;
+        valid = this.player1.gameboard.receiveAttack(coordStr);
+      }
+      console.log(`player2 hit ${coordStr}`);
+      return 
+    },
+    handleGameOverUI(){
+      this.activeGame = false;
+      let msg = this.player1.gameboard.allShipsSunk() ? 'Player 2 wins!' : 'Player 1 wins!';      
+      console.log(msg);
+      return msg;
+    },
+    handlePlayerMove(coordStr) {
+      let successfulHit = this.player2.gameboard.receiveAttack(coordStr);
+      let msg;
+      if (!successfulHit) {
+        msg = `You already hit ${coordStr}. Click a different square`;
+        console.log(msg);
+        return msg;
+      } else {
+        if (this.isGameOver()) {
+          return this.handleGameOverUI();
+        }
+        this.computerAttackPlayer();
+      }
+      if (this.isGameOver()) {
+        this.handleGameOverUI();
+      }
+      msg = "Player 1, It's your move";
+      return msg;
+
+    },
     getActivePlayerMoveFromPrompt() {
       let activePlayer, targetPlayer;
       [activePlayer, targetPlayer] = this.isPlayer1Turn ? [this.player1, this.player2] : [this.player2, this.player1];
@@ -78,21 +117,32 @@ export function createGameDriver() {
         valid = targetPlayer.gameboard.receiveAttack(move);
       }
     },
-    getActivePlayerMove() {
+    getActivePlayerMoveConsoleVersion() {
       this.getActivePlayerMoveFromPrompt();
     },
-    newGame() {
+    isGameOver() {
+      return this.player1.gameboard.allShipsSunk() || this.player2.gameboard.allShipsSunk();
+    },
+    handleGameOver() {
+      let finalMessage = this.player1.gameboard.allShipsSunk() ? 'player2 wins!' : 'player1 wins!';      
+      alert(finalMessage);
+      this.activeGame = false;
+    },
+    newGameUI() {
+      this.activeGame = true;
+      this.clearGameboards();
+      this.autoPositionBoats(); // add ships
+    },
+    newGameConsole() {
       this.clearGameboards();
       this.autoPositionBoats(); // add ships
       this.consoleLogGameBoards();
-      while (!this.player1.gameboard.allShipsSunk() && !this.player2.gameboard.allShipsSunk()) {
-        this.getActivePlayerMove();
+      while (!this.isGameOver()) {
+        this.getActivePlayerMoveConsoleVersion();
         this.consoleLogGameBoards();
         this.isPlayer1Turn = !this.isPlayer1Turn; // toggle activePlayer
       }
-      // output game end message
-      let finalMessage = this.player1.gameboard.allShipsSunk() ? 'player2 wins!' : 'player1 wins!';      
-      alert(finalMessage);
+      this.handleGameOver() // output game end message
     },
   }
 }

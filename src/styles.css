@@ -54,6 +54,26 @@
   height: auto;
   max-width: 100%;
   background-color: rgb(103, 255, 103);
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  grid-template-rows: repeat(10, 1fr);
+  gap: 1px;
+}
+.grid-cell {
+  /* background-color: lightgray; */
+  border: 1px solid #ccc;
+}
+.hitShip {
+  background-color: red;
+}
+.notHitShip {
+  background-color: rgb(47, 255, 47);
+}
+.hitWater {
+  background-color: rgb(104, 103, 103);
+}
+.notHitWater {
+  background-color: rgb(223, 223, 223);
 }
 .bottomBarWrapper {
   width: 100%;
