@@ -12,17 +12,18 @@ export function createGameDriver() {
       let player1Name = 'player1';
       let player2Name = 'player2';
       let sideLength = this.player1.gameboard.sideLength;
+      let xLabelStr = '';
+      for (let i = 0; i < sideLength; i++) {
+        xLabelStr += ` ${i}`;
+      }
+      
       for (const [name, player] of [[player1Name, this.player1], [player2Name, this.player2]]) {
         let curGameboard = player.gameboard;
         console.log(`${name} gameboard below`);
-        let topStr = '';
-        for (let i = 0; i < sideLength; i++) {
-          topStr += ` ${i}`;
-        }
-        console.log(topStr);
-        for (let x=0; x < sideLength; x++){
+        console.log(xLabelStr);
+        for (let y=sideLength-1; y >= 0; y--){
           let curOutputStr = '';
-          for (let y=0; y<sideLength; y++){
+          for (let x=0; x<sideLength; x++){
             let curChar
             let curStr = `${x},${y}`;
             let isShipHere = curGameboard.isShipHere(curStr);
@@ -34,9 +35,10 @@ export function createGameDriver() {
             }
             curOutputStr += `|${curChar}`;
           }
-          curOutputStr += `| ${x}`;
+          curOutputStr += `| ${y}`;
           console.log(curOutputStr);
         }
+        console.log(xLabelStr);
       }
     },
     autoPositionBoatsForPlayer(player, boatCoords) {
