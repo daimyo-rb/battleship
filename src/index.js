@@ -1,1 +1,4 @@
-console.log('hello world');
+import { createGameDriver } from "./gameDriver";
+
+let gameDriver = createGameDriver();
+window.gameDriver = gameDriver;

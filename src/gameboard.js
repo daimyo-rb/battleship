@@ -9,6 +9,9 @@ export function createGameboard() {
     getShipAtCell(coordStr) {
       return this.cellShipMap.has(coordStr) ? this.cellShipMap.get(coordStr) : null;
     },
+    isShipHere(coordStr){
+      return this.getShipAtCell(coordStr) ? true : false;
+    },
     isCellHit(coordStr) {
       return this.cellsHit.has(coordStr);
     },
@@ -35,7 +38,7 @@ export function createGameboard() {
     placeShip(coordList) {
       // check if valid location
       coordList.forEach(coordStr => {
-        if (!this.isCellValidForNewShip) {
+        if (!this.isCellValidForNewShip(coordStr)) {
           throw new Error(`can't use coord: ${coordStr}`);
         }
       });
@@ -47,9 +50,13 @@ export function createGameboard() {
       this.shipList.push(newShip); // add ship to shipList
     },
     receiveAttack(coordStr) {
+      if (!this.isCellInBounds(coordStr)) {
+        console.log(`cell out of bounds ${coordStr}`);
+        return false;
+      }
       if (this.isCellHit(coordStr)) {
         console.log('cell already hit');
-        return;
+        return false;
       }
       this.cellsHit.add(coordStr);
       let shipAtCell = this.getShipAtCell(coordStr);
@@ -59,6 +66,7 @@ export function createGameboard() {
       } else {
         console.log(`miss: ${coordStr}`);
       }
+      return true;
     },
     allShipsSunk() {
       for (const ship of this.shipList) {
