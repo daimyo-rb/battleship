@@ -163,16 +163,16 @@ export function createGameDriver() {
       }
     },
     positionBoatsUI() {
-      // this.autoPositionBoats();
-      let boatCoords2 = [
-        ['0,5','1,5','2,5','3,5','4,5'],
-        ['4,0','5,0','6,0','7,0'],
-        ['0,0','0,1','0,2'],
-        ['9,6','9,7','9,8'],
-        ['7,4','7,5'],
-      ];
-      this.manuallyPositionBoats();
-      this.autoPositionBoatsForPlayer(this.player2, boatCoords2);
+      this.autoPositionBoats();
+      // let boatCoords2 = [
+      //   ['0,5','1,5','2,5','3,5','4,5'],
+      //   ['4,0','5,0','6,0','7,0'],
+      //   ['0,0','0,1','0,2'],
+      //   ['9,6','9,7','9,8'],
+      //   ['7,4','7,5'],
+      // ];
+      // this.manuallyPositionBoats();
+      // this.autoPositionBoatsForPlayer(this.player2, boatCoords2);
     },
     newGameUI() {
       this.activeGame = true;
