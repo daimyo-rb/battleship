@@ -16,7 +16,6 @@ export function createGameDriver() {
       for (let i = 0; i < sideLength; i++) {
         xLabelStr += ` ${i}`;
       }
-      
       for (const [name, player] of [[player1Name, this.player1], [player2Name, this.player2]]) {
         let curGameboard = player.gameboard;
         console.log(`${name} gameboard below`);
@@ -83,23 +82,16 @@ export function createGameDriver() {
       this.getActivePlayerMoveFromPrompt();
     },
     newGame() {
-      // clear gameboards
       this.clearGameboards();
-      // add ships
-      this.autoPositionBoats();
-      // print gameboard
+      this.autoPositionBoats(); // add ships
       this.consoleLogGameBoards();
-      // console.log()
       while (!this.player1.gameboard.allShipsSunk() && !this.player2.gameboard.allShipsSunk()) {
-        // get valid player move
         this.getActivePlayerMove();
-        // print gameboard
         this.consoleLogGameBoards();
-        // toggle activePlayer
-        this.isPlayer1Turn = !this.isPlayer1Turn;
+        this.isPlayer1Turn = !this.isPlayer1Turn; // toggle activePlayer
       }
-      let finalMessage = this.player1.gameboard.allShipsSunk() ? 'player2 wins!' : 'player1 wins!';
       // output game end message
+      let finalMessage = this.player1.gameboard.allShipsSunk() ? 'player2 wins!' : 'player1 wins!';      
       alert(finalMessage);
     },
   }
