@@ -1,7 +1,8 @@
 import { createGameboard } from "./gameboard";
 
-export function createPlayer() {
+export function createPlayer(name) {
 	return {
 		gameboard: createGameboard(),
+		name,
 	}
 }
