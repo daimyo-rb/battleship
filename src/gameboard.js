@@ -37,17 +37,18 @@ export function createGameboard() {
     },
     placeShip(coordList) {
       // check if valid location
-      coordList.forEach(coordStr => {
+      for (const coordStr of coordList) {
         if (!this.isCellValidForNewShip(coordStr)) {
-          throw new Error(`can't use coord: ${coordStr}`);
+          console.log(`can't use coord: ${coordStr}`);
+          return false;
         }
-      });
-      // TODO: check if coordList is contiguous and in ordre
+      }
       let newShip = createShip(coordList.length); // create ship
       coordList.forEach(coordStr => { // update cellShipMap
         this.cellShipMap.set(coordStr, newShip);
       });
       this.shipList.push(newShip); // add ship to shipList
+      return true;
     },
     receiveAttack(coordStr) {
       if (!this.isCellInBounds(coordStr)) {

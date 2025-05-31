@@ -106,7 +106,6 @@ export function createGameDriver() {
       }
       msg = "Player 1, It's your move";
       return msg;
-
     },
     getActivePlayerMoveFromPrompt() {
       let activePlayer, targetPlayer;
@@ -128,10 +127,57 @@ export function createGameDriver() {
       alert(finalMessage);
       this.activeGame = false;
     },
+    buildCoordList(startCoordStr, endCoordStr) {
+      let [start_x, start_y] = startCoordStr.split(',').map(Number);
+      let [end_x, end_y] = endCoordStr.split(',').map(Number);
+      let coordList = [];
+      if (start_x === end_x) { // vertical
+        for (let y = Math.min(start_y, end_y); y <= Math.max(start_y, end_y); y++) {
+          coordList.push(`${start_x},${y}`);
+        }
+      } else {
+        for (let x = Math.min(start_x, end_x); x <= Math.max(start_x, end_x); x++) {
+          coordList.push(`${x},${start_y}`);
+        }
+      }
+      return coordList;
+    },
+    manuallyPositionBoats() {
+      let boatLengths = [5,4,3,3,2];
+      for (const len of boatLengths) {
+        let valid = false;
+        while (!valid) {
+          let defaultStr = "example: ('2,1' '2,5'), ('5,7' '8,7') ('0,9' '2,9') ('4,3' '4,5') ('6,1' '6,2')";
+          let startLoc = prompt(`where do you want boat of length ${len} to start? (enter coordinates as 'x,y') ${defaultStr}`);
+          let endLoc = prompt(`where do you want boat of length ${len} to end? (enter coordsinates as 'x,y') ${defaultStr}`);
+          let coordList = this.buildCoordList(startLoc, endLoc);
+          if (coordList.length != len) {
+            alert(`wrong length ${coordList.length} passed (expected ${len})`);
+            continue;
+          }
+          valid = this.player1.gameboard.placeShip(coordList);
+          if (!valid) {
+            alert('invalid coordinates');
+          }
+        }
+      }
+    },
+    positionBoatsUI() {
+      // this.autoPositionBoats();
+      let boatCoords2 = [
+        ['0,5','1,5','2,5','3,5','4,5'],
+        ['4,0','5,0','6,0','7,0'],
+        ['0,0','0,1','0,2'],
+        ['9,6','9,7','9,8'],
+        ['7,4','7,5'],
+      ];
+      this.manuallyPositionBoats();
+      this.autoPositionBoatsForPlayer(this.player2, boatCoords2);
+    },
     newGameUI() {
       this.activeGame = true;
       this.clearGameboards();
-      this.autoPositionBoats(); // add ships
+      this.positionBoatsUI(); // add ships
     },
     newGameConsole() {
       this.clearGameboards();
